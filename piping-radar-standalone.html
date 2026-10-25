@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piping Radar</title>
+<style>html,body{margin:0;padding:0;background:#02021f;} body{min-height:100vh;} </style>
+</head>
+<body>
+<!-- PIPING RADAR V6: search deliberately does NOT re-render while typing. Type freely, then press SEARCH or Enter. -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Quattrocento:wght@400;700&display=swap');
+#piping-radar{--navy:#02021f;--gold:#f5ad16;--cream:#fffaf0;--muted:#c9c6bd;--red:#ef3928;box-sizing:border-box;background:linear-gradient(145deg,#02021f,#07133b 60%,#02021f);color:var(--cream);font-family:"Quattrocento",Georgia,serif;padding:38px 28px;max-width:1180px;margin:auto}#piping-radar *{box-sizing:border-box}
+.pr-head{text-align:center;max-width:880px;margin:auto auto 26px}.pr-kicker,.pr-btn,.pr-filter,.pr-action,.pr-cat,.pr-badge{font-family:"Cinzel",Georgia,serif}.pr-kicker{font-size:12px;letter-spacing:4px;color:var(--gold)}.pr-head h1{font-family:"Cinzel",Georgia,serif;font-size:clamp(36px,5vw,64px);font-weight:500;margin:10px 0}.pr-head p{font-size:18px;line-height:1.45;margin:0}.pr-rule{height:3px;background:linear-gradient(90deg,var(--gold),transparent);margin:24px 0}
+.pr-search{width:100%;padding:16px 18px;background:var(--cream);border:2px solid #dca22d;font:18px "Quattrocento",Georgia,serif;color:#111}.pr-search-row{display:grid;grid-template-columns:1fr auto;gap:8px}.pr-search-go{background:var(--gold);color:#17120a;border:2px solid var(--gold);padding:0 18px;cursor:pointer;font-family:"Cinzel",Georgia,serif;font-size:11px;font-weight:600}.pr-cats{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.pr-btn,.pr-toggle,.pr-reset{background:transparent;color:var(--cream);border:1px solid #aaa;padding:10px 13px;cursor:pointer;font-family:"Cinzel",Georgia,serif;font-size:11px}.pr-btn.active,.pr-toggle.active{background:var(--gold)!important;color:#17120a!important;border-color:var(--gold)!important}.pr-btn span{font-family:"Quattrocento",Georgia,serif;font-size:10px;opacity:.8;margin-left:3px}
+.pr-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}.pr-filter{width:100%;padding:12px;background:#091333;color:var(--cream);border:1px solid var(--cream);font-size:12px}.pr-special{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:18px 0 25px}.pr-reset{border-color:var(--gold);color:var(--gold)}.pr-results-head{display:flex;justify-content:space-between;align-items:end;border-bottom:2px solid var(--gold);padding-bottom:7px;margin-bottom:16px}.pr-results-head h2{font-family:"Cinzel",Georgia,serif;font-size:27px;font-weight:500;margin:0}
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.pr-card{border:1px solid rgba(255,255,255,.35);border-top:3px solid var(--gold);padding:20px;background:linear-gradient(145deg,rgba(10,25,69,.94),rgba(2,2,31,.97));display:flex;flex-direction:column;min-height:300px}.pr-top{display:flex;justify-content:space-between;gap:8px;min-height:26px}.pr-badges{display:flex;gap:5px;flex-wrap:wrap}.pr-badge{font-size:9px;padding:5px 7px;border:1px solid var(--gold);color:var(--gold)}.pr-badge.new{background:var(--gold);color:#1c1407}.pr-badge.closing{background:var(--red);border-color:var(--red);color:white}.pr-cat{font-size:10px;letter-spacing:1px;text-transform:uppercase}.pr-card h3{font-family:"Cinzel",Georgia,serif;font-size:clamp(19px,2.2vw,27px);line-height:1.15;margin:14px 0 8px}.pr-meta{font-weight:700;color:#ffd07a;font-size:15px;line-height:1.4;margin-bottom:8px}.pr-deadline{color:#ff9a8f;font-weight:700;margin-bottom:9px}.pr-desc{font-size:17px;line-height:1.42;flex:1;margin:0 0 14px}.pr-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:15px}.pr-tag{border:1px solid rgba(255,255,255,.45);padding:4px 7px;font-size:12px}.pr-action{align-self:flex-start;background:var(--gold);color:#17120a;text-decoration:none;padding:10px 13px;font-size:11px;font-weight:600}.pr-empty{grid-column:1/-1;padding:35px;text-align:center;border:1px solid #666}.pr-status{grid-column:1/-1;padding:28px;text-align:center;border:1px solid rgba(245,173,22,.55);color:var(--muted)}.pr-badge.closed{border-color:#999;color:#ccc}.pr-source{font-size:12px;color:var(--muted);margin:0 0 12px}.pr-foot{margin-top:28px;border-top:1px solid #8a671e;padding-top:18px;color:var(--muted);font-size:14px;line-height:1.45}
+@media(max-width:800px){#piping-radar{padding:28px 16px}.pr-filters{grid-template-columns:1fr 1fr}.pr-grid{grid-template-columns:1fr}.pr-special{grid-template-columns:1fr 1fr}.pr-reset{grid-column:1/-1}.pr-card{min-height:0}}@media(max-width:520px){.pr-filters{grid-template-columns:1fr}.pr-search-row{grid-template-columns:1fr}.pr-search-go{padding:12px 18px}}
+</style>
+<section id="piping-radar">
+<header class="pr-head"><div class="pr-kicker">ENJOY YOUR PIPING</div><h1>Piping Radar</h1><p>The worldwide piping calendar & opportunities directory — gigs, events, competitions, jobs, funding, learning and creative opportunities.</p></header><div class="pr-rule"></div>
+<div style="margin:0 0 14px 0;position:relative;z-index:20;">
+  <label for="radar-search-v6" style="display:block;margin-bottom:8px;font-family:'Cinzel',Georgia,serif;font-size:11px;letter-spacing:1px;color:#f5ad16;">SEARCH EVERYTHING</label>
+  <div class="pr-search-row">
+    <input id="radar-search-v6" class="pr-search" type="text" autocomplete="off" placeholder="Search artists, places, jobs, grants, piobaireachd…">
+    <button id="pr-search-go" class="pr-search-go" type="button">SEARCH</button>
+  </div>
+</div>
+<div id="pr-cats" class="pr-cats"></div><div class="pr-filters"><select id="pr-region" class="pr-filter"><option value="">All locations</option></select><select id="pr-date" class="pr-filter"><option value="">Any date</option><option value="30">Next 30 days</option><option value="90">Next 90 days</option><option value="365">Next 12 months</option></select><select id="pr-pipe" class="pr-filter"><option value="">All pipe types / music</option></select><select id="pr-sort" class="pr-filter"><option value="soonest">Soonest first</option><option value="newest">Newly added</option><option value="closing">Closing soon</option></select></div>
+<div class="pr-special"><button id="pr-new" class="pr-toggle">★ New This Week</button><button id="pr-closing" class="pr-toggle">⏰ Closing Soon</button><button id="pr-reset" class="pr-reset">Reset filters</button></div>
+<div class="pr-results-head"><h2>Explore the Radar</h2><span id="pr-count"></span></div><div id="pr-grid" class="pr-grid"></div>
+<footer class="pr-foot"><strong>Know something we should?</strong> Piping Radar covers piping and genuinely relevant traditional-music opportunities worldwide. Always confirm final details, availability and eligibility with the organiser before travelling or applying.</footer></section>
+<script>
+
+(function(){
+var FEED="https://docs.google.com/spreadsheets/d/e/2PACX-1vRJHKdXwm0-oEwDXZwE_hL0pjH0HJj6wsh85HHejnVwE1qq5encTSb67t8mjN_9rkEq_sO-09hDredm/pub?gid=31382219&single=true&output=csv";
+var listings=[];
+var cats=["All","Gigs","Events","Competitions","Jobs","Funding","Learning","Opportunities"];
+var today=new Date();today.setHours(12,0,0,0);
+var state={cat:"All",newOnly:false,closingOnly:false,query:""};
+function el(id){return document.getElementById(id)}
+function esc(s){return String(s==null?"":s).replace(/[&<>\"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function parse(s){if(!s)return null;var d=new Date(String(s).trim()+"T12:00:00");return isNaN(d)?null:d}
+function days(a,b){var d=typeof b==="string"?parse(b):b;if(!a||!d)return 999999;return Math.ceil((d-a)/86400000)}
+function fmt(s){var d=parse(s);return d?d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}):""}
+function splitCSV(text){var rows=[],row=[],cell="",q=false;for(var i=0;i<text.length;i++){var c=text[i],n=text[i+1];if(q){if(c==='"'&&n==='"'){cell+='"';i++}else if(c==='"'){q=false}else{cell+=c}}else{if(c==='"'){q=true}else if(c===','){row.push(cell);cell=""}else if(c==='\n'){row.push(cell.replace(/\r$/,"") );rows.push(row);row=[];cell=""}else{cell+=c}}}if(cell.length||row.length){row.push(cell.replace(/\r$/,"") );rows.push(row)}return rows}
+function val(r,i){return (r[i]||"").trim()}
+function yes(v){return /^yes$/i.test(v)}
+function mapRow(r){
+ var tags=val(r,17)?val(r,17).split(/\s*,\s*/).filter(Boolean):[];
+ var pipes=val(r,10)?val(r,10).split(/\s*,\s*/).filter(Boolean):[];
+ var comp=[];if(val(r,11))comp.push(val(r,11));if(val(r,12))comp.push(val(r,12));if(yes(val(r,13)))comp.push("Solo piping");if(yes(val(r,14)))comp.push("Pipe band");if(yes(val(r,15)))comp.push("Highland Games");
+ return {id:val(r,0),title:val(r,1),category:val(r,2),subtype:val(r,3),date:val(r,4),end:val(r,5),deadline:val(r,6),opens:val(r,7),location:val(r,8),region:val(r,9),pipes:pipes,competitionType:val(r,11),level:val(r,12),solo:yes(val(r,13)),band:yes(val(r,14)),games:yes(val(r,15)),desc:val(r,16),tags:tags.concat(comp).filter(function(x,i,a){return x&&a.indexOf(x)===i}),source:val(r,18),url:val(r,19),action:val(r,20)||"Details",added:val(r,21),verified:val(r,22)}
+}
+function isOngoing(x){return !x.date || /^2099-/.test(x.date)}
+function isNew(x){var d=parse(x.added);return d&&d<=today&&days(d,today)<=7}
+function isClosing(x){var d=parse(x.deadline);return d&&d>=today&&days(today,d)<=14}
+function deadlineClosed(x){var d=parse(x.deadline);return d&&d<today}
+function live(x){
+ if(isOngoing(x))return true;
+ var eventCats={"Gigs":1,"Events":1,"Competitions":1,"Learning":1};
+ var expiry=eventCats[x.category]?(x.end||x.date):(x.deadline||x.end||x.date);
+ var d=parse(expiry);return !d||d>=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+}
+function countCat(c){return listings.filter(live).filter(function(x){return c==="All"||x.category===c}).length}
+function rebuildControls(){
+ el("pr-cats").innerHTML=cats.map(function(c){return '<button type="button" class="pr-btn'+(c==="All"?' active':'')+'" data-cat="'+esc(c)+'">'+esc(c)+' <span>'+countCat(c)+'</span></button>'}).join("");
+ var regs=Array.from(new Set(listings.map(function(x){return x.region}).filter(Boolean))).sort();
+ el("pr-region").innerHTML='<option value="">All locations</option>'+regs.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>'}).join("");
+ var ps=Array.from(new Set([].concat.apply([],listings.map(function(x){return x.pipes})).filter(Boolean))).sort();
+ el("pr-pipe").innerHTML='<option value="">All pipe types / music</option>'+ps.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>'}).join("");
+ Array.prototype.forEach.call(document.querySelectorAll("#pr-cats .pr-btn"),function(btn){btn.onclick=function(){state.cat=this.getAttribute("data-cat");Array.prototype.forEach.call(document.querySelectorAll("#pr-cats .pr-btn"),function(b){b.classList.remove("active")});this.classList.add("active");render()}});
+}
+function render(){
+ var q=(state.query||"").toLowerCase().trim(),reg=el("pr-region").value,pipe=el("pr-pipe").value,h=Number(el("pr-date").value)||0;
+ var a=listings.filter(live).filter(function(x){
+  var hay=[x.title,x.category,x.subtype,x.location,x.region,x.desc,x.competitionType,x.level,x.source].concat(x.tags,x.pipes).join(" ").toLowerCase();
+  if(q&&hay.indexOf(q)<0)return false;if(state.cat!=="All"&&x.category!==state.cat)return false;if(reg&&x.region!==reg)return false;if(pipe&&x.pipes.indexOf(pipe)<0)return false;
+  if(h&&!isOngoing(x)){var d=parse(x.date||x.deadline);if(d&&days(today,d)>h)return false}if(state.newOnly&&!isNew(x))return false;if(state.closingOnly&&!isClosing(x))return false;return true;
+ });
+ var sort=el("pr-sort").value;
+ a.sort(function(x,y){if(sort==="newest")return (parse(y.added)||0)-(parse(x.added)||0);if(sort==="closing")return (parse(x.deadline)||new Date(2999,0,1))-(parse(y.deadline)||new Date(2999,0,1));return (isOngoing(x)?new Date(2099,0,1):(parse(x.date)||parse(x.deadline)||new Date(2099,0,1)))-(isOngoing(y)?new Date(2099,0,1):(parse(y.date)||parse(y.deadline)||new Date(2099,0,1)))});
+ el("pr-count").textContent=a.length+" listing"+(a.length===1?"":"s");
+ el("pr-grid").innerHTML=a.length?a.map(function(x){
+  var b=[];if(isNew(x))b.push('<span class="pr-badge new">NEW</span>');if(isClosing(x))b.push('<span class="pr-badge closing">CLOSING SOON</span>');else if(deadlineClosed(x)&&["Competitions","Events","Learning"].indexOf(x.category)>=0)b.push('<span class="pr-badge closed">ENTRY CLOSED</span>');if(x.opens&&parse(x.opens)>=today&&days(today,x.opens)<=90)b.push('<span class="pr-badge">OPENS '+esc(fmt(x.opens))+'</span>');
+  var when=isOngoing(x)?"Open / ongoing":fmt(x.date)+(x.end?" – "+fmt(x.end):"");
+  var deadline=x.deadline?'<div class="pr-deadline">'+(deadlineClosed(x)?'Entry/application deadline was: ':'Deadline: ')+esc(fmt(x.deadline))+'</div>':'';
+  var tags=x.tags.map(function(t){return '<span class="pr-tag">'+esc(t)+'</span>'}).join("");
+  var source=x.source?'<div class="pr-source">Source: '+esc(x.source)+(x.verified?' · checked '+esc(fmt(x.verified)):'')+'</div>':'';
+  var link=x.url?'<a class="pr-action" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.action)+' →</a>':'';
+  return '<article class="pr-card"><div class="pr-top"><div class="pr-badges">'+b.join("")+'</div><div class="pr-cat">'+esc(x.category)+'</div></div><h3>'+esc(x.title)+'</h3><div class="pr-meta">'+esc(when)+(x.location?'<br>'+esc(x.location):'')+'</div>'+deadline+'<p class="pr-desc">'+esc(x.desc)+'</p><div class="pr-tags">'+tags+'</div>'+source+link+'</article>';
+ }).join(""):'<div class="pr-empty">No listings match those filters. Try Reset filters.</div>';
+}
+["pr-region","pr-date","pr-pipe","pr-sort"].forEach(function(id){el(id).onchange=render});
+function runSearch(){state.query=el("radar-search-v6").value||"";render()}
+el("pr-search-go").onclick=runSearch;
+el("radar-search-v6").onkeydown=function(e){if(e.key==="Enter"){runSearch()}};
+el("pr-new").onclick=function(){state.newOnly=!state.newOnly;this.classList.toggle("active");render()};
+el("pr-closing").onclick=function(){state.closingOnly=!state.closingOnly;this.classList.toggle("active");render()};
+el("pr-reset").onclick=function(){state={cat:"All",newOnly:false,closingOnly:false,query:""};el("radar-search-v6").value="";["pr-region","pr-date","pr-pipe"].forEach(function(id){el(id).value=""});el("pr-sort").value="soonest";Array.prototype.forEach.call(document.querySelectorAll(".pr-btn"),function(b){b.classList.toggle("active",b.getAttribute("data-cat")==="All")});el("pr-new").classList.remove("active");el("pr-closing").classList.remove("active");render()};
+el("pr-grid").innerHTML='<div class="pr-status">Loading the latest Piping Radar listings…</div>';
+fetch(FEED,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(function(text){var rows=splitCSV(text);if(rows.length<2)throw new Error("No listing rows received");listings=rows.slice(1).filter(function(r){return val(r,0)}).map(mapRow);rebuildControls();render()}).catch(function(err){el("pr-count").textContent="Feed unavailable";el("pr-grid").innerHTML='<div class="pr-empty"><strong>Radar feed could not be loaded.</strong><br>Please refresh the page in a moment.<br><small>'+esc(err.message)+'</small></div>'});
+})();
+
+</script>
+
+</body>
+</html>
