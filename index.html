@@ -69,7 +69,17 @@ function rebuildControls(){
  el("pr-region").innerHTML='<option value="">All locations</option>'+regs.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>'}).join("");
  var ps=Array.from(new Set([].concat.apply([],listings.map(function(x){return x.pipes})).filter(Boolean))).sort();
  el("pr-pipe").innerHTML='<option value="">All pipe types / music</option>'+ps.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>'}).join("");
- Array.prototype.forEach.call(document.querySelectorAll("#pr-cats .pr-btn"),function(btn){btn.onclick=function(){state.cat=this.getAttribute("data-cat");Array.prototype.forEach.call(document.querySelectorAll("#pr-cats .pr-btn"),function(b){b.classList.remove("active")});this.classList.add("active");render()}});
+ Array.prototype.forEach.call(document.querySelectorAll("#pr-cats .pr-btn"),function(btn){btn.onclick=function(){
+  var chosen=this.getAttribute("data-cat");
+  state={cat:chosen,newOnly:false,closingOnly:false,query:""};
+  el("radar-search-v6").value="";
+  ["pr-region","pr-date","pr-pipe"].forEach(function(id){el(id).value=""});
+  el("pr-sort").value="soonest";
+  el("pr-new").classList.remove("active");
+  el("pr-closing").classList.remove("active");
+  Array.prototype.forEach.call(document.querySelectorAll("#pr-cats .pr-btn"),function(b){b.classList.toggle("active",b.getAttribute("data-cat")===chosen)});
+  render();
+}});
 }
 function render(){
  var q=(state.query||"").toLowerCase().trim(),reg=el("pr-region").value,pipe=el("pr-pipe").value,h=Number(el("pr-date").value)||0;
@@ -99,7 +109,7 @@ el("pr-new").onclick=function(){state.newOnly=!state.newOnly;this.classList.togg
 el("pr-closing").onclick=function(){state.closingOnly=!state.closingOnly;this.classList.toggle("active");render()};
 el("pr-reset").onclick=function(){state={cat:"All",newOnly:false,closingOnly:false,query:""};el("radar-search-v6").value="";["pr-region","pr-date","pr-pipe"].forEach(function(id){el(id).value=""});el("pr-sort").value="soonest";Array.prototype.forEach.call(document.querySelectorAll(".pr-btn"),function(b){b.classList.toggle("active",b.getAttribute("data-cat")==="All")});el("pr-new").classList.remove("active");el("pr-closing").classList.remove("active");render()};
 el("pr-grid").innerHTML='<div class="pr-status">Loading the latest Piping Radar listings…</div>';
-fetch(FEED,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(function(text){var rows=splitCSV(text);if(rows.length<2)throw new Error("No listing rows received");listings=rows.slice(1).filter(function(r){return val(r,0)}).map(mapRow);rebuildControls();render()}).catch(function(err){el("pr-count").textContent="Feed unavailable";el("pr-grid").innerHTML='<div class="pr-empty"><strong>Radar feed could not be loaded.</strong><br>Please refresh the page in a moment.<br><small>'+esc(err.message)+'</small></div>'});
+fetch(FEED,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(function(text){var rows=splitCSV(text);if(rows.length<2)throw new Error("No listing rows received");listings=rows.slice(1).filter(function(r){return val(r,0)}).map(mapRow);rebuildControls();state={cat:"All",newOnly:false,closingOnly:false,query:""};el("radar-search-v6").value="";["pr-region","pr-date","pr-pipe"].forEach(function(id){el(id).value=""});el("pr-sort").value="soonest";render()}).catch(function(err){el("pr-count").textContent="Feed unavailable";el("pr-grid").innerHTML='<div class="pr-empty"><strong>Radar feed could not be loaded.</strong><br>Please refresh the page in a moment.<br><small>'+esc(err.message)+'</small></div>'});
 })();
 
 </script>
